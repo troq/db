@@ -29,6 +29,13 @@ func connect() {
 		log.Panic("Dead connection to postgres: ", err)
 	}
 
+	if maxIdleConnections := os.Getenv("DATABASE_MAX_IDLE_CONNECTIONS"); maxIdleConnections == "" {
+		db.DB().SetMaxIdleConns(1)
+	} else if mc, err := strconv.Atoi(maxIdleConnections); err == nil {
+		db.DB().SetMaxIdleConns(mc)
+	} else {
+		log.Panic("Could not convert DATABASE_MAX_IDLE_CONNECTIONS to int: ", err)
+	}
 	if maxConnections := os.Getenv("DATABASE_MAX_CONNECTIONS"); maxConnections == "" {
 		db.DB().SetMaxOpenConns(100)
 	} else if mc, err := strconv.Atoi(maxConnections); err == nil {
