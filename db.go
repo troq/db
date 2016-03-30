@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	db   gorm.DB
+	db   *gorm.DB
 	once sync.Once
 )
 
@@ -45,7 +45,7 @@ func connect() {
 	}
 }
 
-func DB() gorm.DB {
+func DB() *gorm.DB {
 	once.Do(connect)
 	return db
 }
